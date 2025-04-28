@@ -39,8 +39,8 @@ const MapSection = () => {
       if (!map.current) return;
       
       // Sample bike routes for South Korea (simplified)
-      const hanRiverRoute = {
-        'type': 'Feature',
+      const hanRiverRoute: GeoJSON.Feature = {
+        'type': 'Feature' as const,
         'properties': {},
         'geometry': {
           'type': 'LineString',
@@ -56,8 +56,8 @@ const MapSection = () => {
         }
       };
 
-      const eastCoastRoute = {
-        'type': 'Feature',
+      const eastCoastRoute: GeoJSON.Feature = {
+        'type': 'Feature' as const,
         'properties': {},
         'geometry': {
           'type': 'LineString',
