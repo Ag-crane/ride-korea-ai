@@ -5,7 +5,6 @@ import Hero from '@/components/Hero';
 import Features from '@/components/Features';
 import AIAssistant from '@/components/AIAssistant';
 import MapSection from '@/components/MapSection';
-import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -16,7 +15,6 @@ const Index = () => {
       <Features />
       <AIAssistant />
       <MapSection />
-      <Testimonials />
       <Footer />
     </div>
   );
