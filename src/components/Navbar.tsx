@@ -1,9 +1,12 @@
+
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useSurveyModal } from '@/contexts/SurveyModalContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { openSurvey } = useSurveyModal();
   
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
@@ -35,7 +38,7 @@ const Navbar = () => {
             <a href="#ai-assistant" className="py-2 text-gray-700 hover:text-primary">AI 음성 안내</a>
             <a href="#map" className="py-2 text-gray-700 hover:text-primary">지도</a>
           </div>
-          <Button className="mt-4 md:mt-0 md:ml-8">앱 다운로드</Button>
+          <Button className="mt-4 md:mt-0 md:ml-8" onClick={openSurvey}>앱 다운로드</Button>
         </div>
       </div>
     </nav>

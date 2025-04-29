@@ -1,7 +1,11 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { useSurveyModal } from '@/contexts/SurveyModalContext';
 
 const Footer = () => {
+  const { openSurvey } = useSurveyModal();
+  
   return (
     <footer className="bg-gray-900 text-gray-300 pt-16 pb-8">
       <div className="container mx-auto px-4">
@@ -12,7 +16,7 @@ const Footer = () => {
           </p>
 		  <div className="flex items-center gap-4">
             <h3 className="text-2xl font-bold text-white">라이딩 메이트 AI</h3>
-            <Button>앱 다운로드</Button>
+            <Button onClick={openSurvey}>앱 다운로드</Button>
           </div>
         </div>
         

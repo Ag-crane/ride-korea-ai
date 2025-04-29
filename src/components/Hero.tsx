@@ -1,8 +1,12 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { useSurveyModal } from '@/contexts/SurveyModalContext';
 
 const Hero = () => {
+  const { openSurvey } = useSurveyModal();
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-white to-blue-50 py-20 md:py-32">
       <div className="container mx-auto px-4 relative z-10">
@@ -17,7 +21,7 @@ const Hero = () => {
               <span className="whitespace-normal md:whitespace-nowrap">100% 한국어 지원으로 모든 라이더에게 완벽한 솔루션을 제공합니다.</span>
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="px-8 font-medium">
+              <Button size="lg" className="px-8 font-medium" onClick={openSurvey}>
                 앱 다운로드 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
