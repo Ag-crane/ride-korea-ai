@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -12,9 +11,29 @@ const Hero = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 leading-tight flex flex-col gap-8">
-              <div className="whitespace-normal md:whitespace-nowrap">한국 <span className="text-primary">최적화</span> 자전거</div>
-              <div className="whitespace-normal md:whitespace-nowrap">라이딩 <span className="text-primary">AI</span> 어시스턴트</div>
+		  <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 leading-tight flex flex-col gap-4 md:gap-8">
+              {/* 모바일 뷰 */}
+              <div className="flex flex-col gap-4 md:hidden">
+                <div className="flex items-center">
+                  <span>한국 <span className="text-primary">최적화</span></span>
+                </div>
+                <div className="flex items-center">
+                  <span>자전거 라이딩</span>
+                </div>
+                <div className="flex items-center">
+                  <span><span className="text-primary">AI</span> 어시스턴트</span>
+                </div>
+              </div>
+              
+              {/* 데스크톱 뷰 */}
+              <div className="hidden md:flex md:flex-col gap-8">
+                <div className="flex items-center">
+                  <span>한국 <span className="text-primary">최적화</span> 자전거</span>
+                </div>
+                <div className="flex items-center">
+                  <span>라이딩 <span className="text-primary">AI</span> 어시스턴트</span>
+                </div>
+              </div>
             </h1>
             <p className="text-lg text-gray-600 flex flex-col gap-2">
               <span className="whitespace-normal md:whitespace-nowrap">한국의 자전거 도로와 추천 코스에 최적화된 지도 데이터로 더 정확하고 안전한 라이딩을 경험하세요.</span>

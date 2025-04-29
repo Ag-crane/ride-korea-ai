@@ -7,9 +7,18 @@ const AIAssistant = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 flex flex-col gap-3">
-              <span className="whitespace-normal md:whitespace-nowrap">AI 음성 페이스메이킹으로</span>
-              <span className="whitespace-normal md:whitespace-nowrap">더 안전한 라이딩</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              {/* 모바일 뷰 (세 줄) */}
+              <div className="flex flex-col gap-2 md:hidden">
+                <span>AI 음성</span>
+                <span>페이스메이킹으로</span>
+                <span>더 안전한 라이딩</span>
+              </div>
+              {/* 데스크톱 뷰 (두 줄) */}
+              <div className="hidden md:flex md:flex-col md:gap-3">
+                <span className="whitespace-normal md:whitespace-nowrap">AI 음성 페이스메이킹으로</span>
+                <span className="whitespace-normal md:whitespace-nowrap">더 안전한 라이딩</span>
+              </div>
             </h2>
             <p className="text-lg text-gray-600 mb-8 flex flex-col gap-2">
               <span className="whitespace-normal md:whitespace-nowrap">주행 중 화면을 보지 않아도 AI가 모든 것을 안내해드립니다.</span>
@@ -46,7 +55,7 @@ const AIAssistant = () => {
             </div>
           </div>
           
-          <div className="relative">
+          <div className="relative overflow-hidden">
             <div className="bg-white rounded-2xl shadow-xl p-5 md:p-8 relative z-10">
               <div className="flex items-center justify-between mb-6">
                 <div className="space-y-1">
