@@ -1,141 +1,35 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Bike, Navigation } from 'lucide-react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
 
 const MapSection = () => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState<string>('');
-  const [showTokenInput, setShowTokenInput] = useState<boolean>(true);
+  const [activeRoute, setActiveRoute] = useState<string>('hanriver');
 
-  useEffect(() => {
-    if (!mapContainer.current || !mapboxToken || mapboxToken === '') return;
-
-    if (map.current) return; // prevent duplicate initialization
-
-    mapboxgl.accessToken = mapboxToken;
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/outdoors-v12',
-      center: [127.7669, 35.9078], // Center on South Korea
-      zoom: 7,
-      pitch: 30
-    });
-
-    // Add navigation controls
-    map.current.addControl(
-      new mapboxgl.NavigationControl({
-        visualizePitch: true,
-      }),
-      'top-right'
-    );
-
-    // Add typical Korean cycling routes when map loads
-    map.current.on('load', () => {
-      if (!map.current) return;
-      
-      // Sample bike routes for South Korea (simplified)
-      const hanRiverRoute: GeoJSON.Feature = {
-        'type': 'Feature' as const,
-        'properties': {},
-        'geometry': {
-          'type': 'LineString',
-          'coordinates': [
-            [126.9019, 37.5354],
-            [126.9381, 37.5293],
-            [126.9691, 37.5268],
-            [127.0033, 37.5280],
-            [127.0215, 37.5236],
-            [127.0518, 37.5268],
-            [127.0874, 37.5292]
-          ]
-        }
-      };
-
-      const eastCoastRoute: GeoJSON.Feature = {
-        'type': 'Feature' as const,
-        'properties': {},
-        'geometry': {
-          'type': 'LineString',
-          'coordinates': [
-            [129.3588, 36.0718],
-            [129.3799, 35.9920],
-            [129.4398, 35.9120],
-            [129.4284, 35.8368],
-            [129.3819, 35.7681]
-          ]
-        }
-      };
-      
-      // Add source for bike routes
-      map.current.addSource('routes', {
-        'type': 'geojson',
-        'data': {
-          'type': 'FeatureCollection',
-          'features': [hanRiverRoute, eastCoastRoute]
-        }
-      });
-      
-      // Add bike route layer
-      map.current.addLayer({
-        'id': 'route-lines',
-        'type': 'line',
-        'source': 'routes',
-        'layout': {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        'paint': {
-          'line-color': '#4361EE',
-          'line-width': 5,
-          'line-opacity': 0.8
-        }
-      });
-
-      // Add markers for popular starting points
-      const addMarker = (lngLat: [number, number], name: string) => {
-        const markerElement = document.createElement('div');
-        markerElement.className = 'flex items-center justify-center w-10 h-10 bg-primary rounded-full shadow-lg';
-        markerElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/></svg>';
-        
-        new mapboxgl.Marker(markerElement)
-          .setLngLat(lngLat)
-          .setPopup(
-            new mapboxgl.Popup({ offset: 25 })
-              .setHTML(`<h3 class="font-bold">${name}</h3><p>인기 자전거 코스</p>`)
-          )
-          .addTo(map.current!);
-      };
-
-      // Add markers for popular cycling spots
-      addMarker([126.9181, 37.5354], '한강 자전거길');
-      addMarker([129.3588, 36.0718], '동해안 자전거길');
-      addMarker([127.3859, 36.3504], '금강 자전거길');
-    });
-
-    return () => {
-      map.current?.remove();
-    };
-  }, [mapboxToken]);
-
-  const handleTokenSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    localStorage.setItem('mapbox-token', mapboxToken);
-    setShowTokenInput(false);
-  };
-
-  // Check localStorage for token on mount
-  useEffect(() => {
-    const savedToken = localStorage.getItem('mapbox-token');
-    if (savedToken) {
-      setMapboxToken(savedToken);
-      setShowTokenInput(false);
+  // Routes data
+  const routes = {
+    hanriver: {
+      name: '한강 자전거길',
+      description: '서울을 가로지르는 한강 자전거 도로는 도심 속 자연을 만끽할 수 있는 인기 코스입니다.',
+      distance: '약 40km',
+      difficulty: '초급-중급',
+      image: 'https://images.unsplash.com/photo-1602486165697-1c821691b0d5?auto=format&fit=crop&q=80&w=1000'
+    },
+    eastcoast: {
+      name: '동해안 자전거길',
+      description: '푸른 동해와 함께하는 해안 코스로, 아름다운 경치를 즐기며 라이딩할 수 있습니다.',
+      distance: '약 110km',
+      difficulty: '중급-상급',
+      image: 'https://images.unsplash.com/photo-1614977655016-9628745fc695?auto=format&fit=crop&q=80&w=1000'
+    },
+    geumgang: {
+      name: '금강 자전거길',
+      description: '금강을 따라 펼쳐지는 평화로운 풍경과 함께 여유롭게 달릴 수 있는 코스입니다.',
+      distance: '약 60km',
+      difficulty: '초급',
+      image: 'https://images.unsplash.com/photo-1598991656856-95ab398e0737?auto=format&fit=crop&q=80&w=1000'
     }
-  }, []);
+  };
 
   return (
     <section id="map" className="py-20 bg-white">
@@ -148,36 +42,40 @@ const MapSection = () => {
             한국의 자전거 도로와 추천 코스에 최적화된 지도 데이터로 
             더 정확하고 안전한 라이딩을 경험하세요.
           </p>
-
-          {showTokenInput && (
-            <div className="bg-gray-50 p-4 rounded-lg mb-6">
-              <p className="mb-2 text-sm">맵박스 퍼블릭 토큰이 필요합니다. <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-primary">mapbox.com</a>에서 가입 후 토큰을 얻을 수 있습니다.</p>
-              <form onSubmit={handleTokenSubmit} className="flex flex-col sm:flex-row gap-2">
-                <input
-                  type="text"
-                  placeholder="Mapbox 퍼블릭 토큰 입력"
-                  value={mapboxToken}
-                  onChange={(e) => setMapboxToken(e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
-                />
-                <Button type="submit">확인</Button>
-              </form>
-            </div>
-          )}
+        </div>
+        
+        <div className="mb-6 flex flex-wrap justify-center gap-3">
+          {Object.entries(routes).map(([key, route]) => (
+            <Button 
+              key={key}
+              variant={activeRoute === key ? "default" : "outline"}
+              onClick={() => setActiveRoute(key)}
+              className="flex gap-2 items-center"
+            >
+              <Bike className="h-4 w-4" />
+              {route.name}
+            </Button>
+          ))}
         </div>
         
         <div className="relative rounded-2xl overflow-hidden shadow-xl mb-10 aspect-[16/9]" style={{minHeight: '500px'}}>
-          {mapboxToken ? (
-            <div ref={mapContainer} className="absolute inset-0"></div>
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-              <div className="text-white text-center px-4">
-                <Bike className="mx-auto h-16 w-16 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">맵박스 토큰이 필요합니다</h3>
-                <p className="max-w-md">한국의 자전거 경로를 표시하기 위해 맵박스 토큰을 입력해주세요.</p>
+          <img 
+            src={routes[activeRoute as keyof typeof routes].image} 
+            alt={routes[activeRoute as keyof typeof routes].name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
+            <h3 className="text-2xl font-bold mb-2">{routes[activeRoute as keyof typeof routes].name}</h3>
+            <p className="mb-2">{routes[activeRoute as keyof typeof routes].description}</p>
+            <div className="flex gap-6">
+              <div>
+                <span className="font-semibold">거리:</span> {routes[activeRoute as keyof typeof routes].distance}
+              </div>
+              <div>
+                <span className="font-semibold">난이도:</span> {routes[activeRoute as keyof typeof routes].difficulty}
               </div>
             </div>
-          )}
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
