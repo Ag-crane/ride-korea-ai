@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,6 +26,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   hasCurrentApp: z.enum(["yes", "no"], {
@@ -68,6 +70,8 @@ const painPointOptions = [
 ];
 
 const SurveyModal: React.FC<SurveyModalProps> = ({ isOpen, onClose }) => {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -104,11 +108,50 @@ const SurveyModal: React.FC<SurveyModalProps> = ({ isOpen, onClose }) => {
   const watchPainPoints = form.watch("painPoints") || [];
   const showCustomPainPoint = watchPainPoints.includes("other");
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Survey data:", data);
-    toast.success("설문에 응해주셔서 감사합니다!");
-    onClose();
-    // Here you would typically send the data to your backend
+  const saveToSupabase = async (data: FormValues) => {
+    try {
+      // Convert yes/no to boolean
+      const hasCurrentApp = data.hasCurrentApp === "yes";
+      
+      const { error } = await supabase.from("survey_responses").insert({
+        has_current_app: hasCurrentApp,
+        pain_points: data.painPoints || [],
+        custom_pain_point: data.customPainPoint,
+        desired_features: data.desiredFeatures,
+        email: data.email || null,
+      });
+      
+      if (error) {
+        console.error("Error saving survey:", error);
+        throw error;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error("Failed to save survey:", error);
+      return false;
+    }
+  };
+
+  const onSubmit = async (data: FormValues) => {
+    setIsSubmitting(true);
+    
+    try {
+      const saved = await saveToSupabase(data);
+      
+      if (saved) {
+        toast.success("설문에 응해주셔서 감사합니다!");
+        form.reset();
+        onClose();
+      } else {
+        toast.error("설문 저장 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      toast.error("설문 저장 중 오류가 발생했습니다. 다시 시도해주세요.");
+      console.error("Submit error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -304,7 +347,12 @@ const SurveyModal: React.FC<SurveyModalProps> = ({ isOpen, onClose }) => {
                 <Button type="button" variant="outline" onClick={onClose}>
                   취소
                 </Button>
-                <Button type="submit">제출하기</Button>
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? '제출 중...' : '제출하기'}
+                </Button>
               </DialogFooter>
             </form>
           </Form>
