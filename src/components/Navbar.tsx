@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -35,7 +34,6 @@ const Navbar = () => {
             <a href="#features" className="py-2 text-gray-700 hover:text-primary">기능</a>
             <a href="#ai-assistant" className="py-2 text-gray-700 hover:text-primary">AI 음성 안내</a>
             <a href="#map" className="py-2 text-gray-700 hover:text-primary">지도</a>
-            <a href="#testimonials" className="py-2 text-gray-700 hover:text-primary">사용후기</a>
           </div>
           <Button className="mt-4 md:mt-0 md:ml-8">앱 다운로드</Button>
         </div>
