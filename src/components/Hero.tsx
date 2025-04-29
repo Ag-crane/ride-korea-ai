@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
@@ -9,20 +8,17 @@ const Hero = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 leading-tight">
-              한국 <span className="text-primary">최적화</span> 자전거 라이딩<br />
-              <span className="text-primary">AI</span> 어시스턴트
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 leading-tight flex flex-col gap-8">
+              <div className="whitespace-normal md:whitespace-nowrap">한국 <span className="text-primary">최적화</span> 자전거</div>
+              <div className="whitespace-normal md:whitespace-nowrap">라이딩 <span className="text-primary">AI</span> 어시스턴트</div>
             </h1>
-            <p className="text-xl text-gray-600">
-              국내 지도 데이터와 AI 음성 안내로 더 안전하고 즐거운 라이딩을 경험하세요.
-              100% 한국어 지원으로 모든 라이더에게 완벽한 솔루션을 제공합니다.
+            <p className="text-lg text-gray-600 flex flex-col gap-2">
+              <span className="whitespace-normal md:whitespace-nowrap">한국의 자전거 도로와 추천 코스에 최적화된 지도 데이터로 더 정확하고 안전한 라이딩을 경험하세요.</span>
+              <span className="whitespace-normal md:whitespace-nowrap">100% 한국어 지원으로 모든 라이더에게 완벽한 솔루션을 제공합니다.</span>
             </p>
             <div className="flex flex-wrap gap-4">
               <Button size="lg" className="px-8 font-medium">
                 앱 다운로드 <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="px-8 font-medium">
-                더 알아보기
               </Button>
             </div>
           </div>

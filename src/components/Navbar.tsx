@@ -10,7 +10,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-4 md:flex md:justify-between md:items-center">
         <div className="flex items-center justify-between">
           <a href="/" className="flex items-center">
-            <span className="text-2xl font-bold text-primary">라이드코리아</span>
+            <span className="text-2xl font-bold text-primary">라이딩 메이트</span>
             <span className="ml-2 text-sm text-muted-foreground font-medium">AI</span>
           </a>
           
