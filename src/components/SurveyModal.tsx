@@ -120,10 +120,15 @@ const SurveyModal: React.FC<SurveyModalProps> = ({ isOpen, onClose }) => {
               라이딩 메이트 AI 사전 설문조사
             </DialogTitle>
             <DialogDescription>
-              더 나은 서비스를 위해 간단한 설문에 응해주세요.
+              <span className="block mt-1 text-red-500 font-bold mb-2">
+                * 현재 앱은 개발 중이며, 출시 전 사용자 의견을 수집하고 있습니다.
+              </span>
+			  더 나은 서비스를 위해 간단한 설문에 응해주세요.
             </DialogDescription>
           </DialogHeader>
 
+          <div className="h-6"></div>
+          
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
